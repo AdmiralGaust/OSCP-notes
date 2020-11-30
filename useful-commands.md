@@ -1,8 +1,8 @@
-# Nmap Scan
+### Nmap Scan
 
 `nmap -sC -sV -oA nmap-out example.com`
 
-# SCP to copy files
+### SCP to copy files
 
 Upload file/folder
 `scp -r local.txt host:/path/to/dest`
