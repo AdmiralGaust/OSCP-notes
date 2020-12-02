@@ -1,1 +1,19 @@
 3690 - SVN (Check anonymous svn repo access)
+1524 - ingreslock backdoor (connect with netcat)
+3632 - distccd (Distributed code compilation)
+8787 - dRuby (Distributed Ruby)
+21   - FTP
+1099 - RMI (use exploit/multi/misc/java_rmi_server)
+3306 - mysql database (mysql -h 192.168.14.129)
+2049 - Network File System (NFS)
+5432 - Postgres database
+512 - R-services
+513 - R-services
+514 - R-services
+445 - SMB or Samba
+139 - SMB or Samba
+25 - SMTP
+22 - SSH
+6667 - IRC Daemon (could be be unrealRCD having backdoor)
+6697 - IRC Daemon (could be be unrealRCD having backdoor)
+5900 - VNC (vncviewer 192.168.14.129:5900)
