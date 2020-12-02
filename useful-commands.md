@@ -64,6 +64,15 @@ Dump repo content
 
 `svnrdump dump svn://host`
 
+
+## Github Commands
+
+```
+git log --oneline
+git reset 9ef9173
+git reset current~2 (using a relative value -2 before the "current" tag)
+```
+
 ## Searching File System 
 
 ```
