@@ -1,7 +1,7 @@
 # My OSCP Preparation notes
 
-* [Useful-Commands](./useful-commands.md)
-* [Key Points which can help](./key-points.md)
-* [Informational](./info)
+1. [Useful-Commands](./useful-commands.md)
+2. [Key Points which can help](./key-points.md)
+3. [Informational](./info)
 
 ..* [AJP and Coyote](./info/ajp-Coyote.md) 
