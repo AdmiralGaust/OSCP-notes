@@ -1,8 +1,12 @@
 ## Nmap Scan
 
-Launch normal scan
+Launch nmap scan
 
-`nmap -sC -sV -Pn -oA nmap-out example.com`
+```
+nmap -sC -sV -A -Pn -p- -oA nmap example.com
+nmap -sC -sV -Pn --top-ports=20 -oA nmap-top-20 example.com
+sudo nmap -O example.com
+```
 
 Find nse scripts 
 
@@ -70,6 +74,11 @@ FFuf to fuzz content
 
 `ffuf -w content_discovery_all.txt -u http://host/ -o dirfuzz.txt -of md -timeout 30 -ac -s -t 20 -se`
 
+Dirb
+
+```
+dirb http://www.megacorpone.com
+```
 
 ## Virtual Host Discovery
 
@@ -233,4 +242,90 @@ do : gets changes from the other window into the current one
 dp : puts the changes from the current window into the other one
 ]c : jumps to the next change
 [c : jumps to the previous change
+```
+
+
+## Zone Transfer
+
+```
+dnsrecon -d megacorpone.com -t axfr
+dnsenum zonetransfer.me
+```
+
+## iptables rule
+
+```
+// Insert inbound rule #1 to accept all connections from source
+sudo iptables -I INPUT 1 -s 10.11.1.220 -j ACCEPT
+
+// Insert outbound rule #1 to allow connections to destination
+sudo iptables -I OUTPUT 1 -d 10.11.1.220 -j ACCEPT
+
+// zero the packet and byte counters in all chains.
+sudo iptables-z
+```
+
+## SMB Enumeration
+
+```
+sudo nbtscan -r 10.11.1.0/24
+ls -1 /usr/share/nmap/scripts/smb*
+```
+
+## RPCbind
+
+Runs on port 111 and maps RPC services to the their listening ports.
+
+```
+nmap -sV -p 111 --script=rpcinfo 10.02.32.15
+```
+
+## NFS
+
+```
+shownount 10.11.1.12
+nmap -p 111 --script nfs* 10.11.1.12
+```
+
+## SNMP
+
+```
+// try default public, private and manager community strings 
+onesixtyone - c community.txt -i ips.txt
+onesixtyone 192.168.4.0/24 public
+
+// snmpwalk enumerate full MIB tree (v1,2c,3)
+snmpwalk -c public -v1 -t 10 10.11.1.14
+
+// enumerate only users, process, etc
+snmpwalk -c public -v1 10.11.1.14 <MIB-Value>
+```
+
+MIB Values
+
+```
+1.3.6.1 .2.1 .25.1.6.0	- System Processes
+1.3.6.1 .2.1.25.4.2.1.4	- Processes Path
+1.3.6.1.2.1.25.4.2.1.2	- Running Programs
+1.3.6.1.2.1.6.13.1.3	- TCP Local Ports
+1.3.6.1.4.1.77.1.2.25	- User Accounts
+1.3.6.1.2.1.25.6.3.1.2	- Software Name
+1.3.6.1.2.1.25.2.3.1.4	- Storage Units
+```
+
+## Powershell commands
+
+```
+// temporarily allow unsigned scripts to execute
+powershell -ExecutionPolicy Bypass -File admin_login.psl
+```
+
+## Running local http servers
+
+```
+python -m SimpteHTTPServer 7331
+python3 -m http.server 7331
+php -S 0.0.0.0:8888
+ruby -run -e httpd . -p 9008
+busybox httpd -f -p 18880
 ```

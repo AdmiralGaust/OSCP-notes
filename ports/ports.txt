@@ -14,6 +14,9 @@
 139 - SMB or Samba
 25 - SMTP
 22 - SSH
-6667 - IRC Daemon (could be be unrealRCD having backdoor)
-6697 - IRC Daemon (could be be unrealRCD having backdoor)
+6667 - IRC Daemon (could be unrealRCD having backdoor)
+6697 - IRC Daemon (could be unrealRCD having backdoor)
 5900 - VNC (vncviewer 192.168.14.129:5900)
+111 - RPCbind (maps rpc services to listening ports)
+2049 - NFS (try to mount the remote file system)
+161 - SNMP ()
