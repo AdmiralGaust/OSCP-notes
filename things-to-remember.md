@@ -7,3 +7,5 @@
 * Ports below 1024 requires admin/root priveleges to create listener.
 
 * Ensure to get & set execution policy if running powershell commands `Set-ExecutionPolicy Unrestricted` and `Get-ExecutionPolicy`
+
+* When using public exploits, make sure the return address, shellcode and other key components are modified according to the needs.

