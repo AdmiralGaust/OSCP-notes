@@ -51,7 +51,8 @@ Root privileges are required to list firewall rules with iptables
 
 ```
 ls -lah /etc/cron*
-cat / etc/crontab
+cat /etc/crontab
+grep "CRON" /var/log/cron.log
 ```
 
 * Enumerating Installed Applications

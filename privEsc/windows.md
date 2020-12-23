@@ -98,7 +98,7 @@ reg query HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Installer
 // If any of this key is enabled (set to 1), we could craft an MSI file and run it to elevate our privileges.
 ```
 
-* Elevating Medium to High integrity shell using fodhelper(admin required)
+* Elevating Medium to High integrity shell using fodhelper.exe (admin required)
 
 ```
 REG ADD HKCU\Software\Classes\ms-settings\Shell\Open\command
