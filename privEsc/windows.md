@@ -10,12 +10,14 @@ windows-privesc-check2.exe --dump -a -o report.txt
 * Enumerating Users
 
 ```
-echo %username%
 whoami
 whoami /all		#groups, permissions, etc
 whoami /groups	# check cmd integrity level
 net user
+net user /domain			# AD users
 net user <username>
+net user jeff_admin /domain # AD user jeff_admin
+echo %username%
 ```
 
 * Get System information

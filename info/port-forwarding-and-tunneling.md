@@ -40,3 +40,16 @@ cmd.exe /c echo y | plink.exe -ssh -l root -pw toor -R 10.11.0.4:1234:127.0.0.1:
 netsh interface portproxy add v4tov4 listenport=4455 listenaddress=10.11.8.22 connectport=445 connectaddress=192.168.1.118
 ```
 
+## HTTP tunneling
+
+For http tunneling, it needs to setup both http client and server. The client encapsulates the traffic into an HTTP stream and sends it to the server which then decapsulates it and forward to the destined port.
+
+```
+sudo apt install httptunnel
+
+// http client
+htc --forward-port 8888 10.11.0.128:1234
+
+// http server 
+hts --forward-port localhost:8888 1234
+```
