@@ -18,6 +18,7 @@ net user /domain			# AD users
 net user <username>
 net user jeff_admin /domain # AD user jeff_admin
 echo %username%
+net accounts		# domain's account policy
 ```
 
 * Get System information
@@ -128,7 +129,9 @@ return 0;
 }
 ```
 
-* Pass-The-Hash attacks
+* Pass-The-Hash attacks(requires SMB + NTLM)
+
+Existing tools - PsExec from Metasploit, Passing-the-hash toolkit, and Impacket
 
 ```
 // https://github.com/byt3bl33d3r/pth-toolkit

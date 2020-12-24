@@ -59,4 +59,25 @@ __Accessing Resources using TGT__
 
 * To dump hashes we first need to have local admin privileges. We can then use mimikatz to dump the password hashes.
 
+* We can also dump TGT and TGS tickets using mimikatz.
 
+* TGS is encrypted using the SPN's password hash. If we are able to decrypt it using brute force or guessing (in a technique known as Kerberoasting), we will know the password hash of SPN. Further, we can crack this password hash to get clear text password of the service account.
+
+* The user and group permissions in TGS are not verified by the application. If we can get SPN password, we can forge the TGS to become any user. This forged ticket is known as silver(or golden) ticket.
+
+* If we get TGT of other user, we can impersonate to be that user.
+
+
+## Lateral Movement
+
+* __Pass The Hash Attacks__ 
+
+The Pass the Hash (PtH) technique allows an attacker to authenticate to a remote system or service using a user's NTLM hash instead of the associated plaintext password. Note that this will not work for Kerberos authentication but only for server or service(like SMB) using NTLM authentication.
+
+_Use it to extract NTLM hashes of all users who have previously logged in to the local machine and then utilize them to get shell as these users._
+
+* __Overpass the Hash__
+
+PtH techniques can be used to authenticate to only NTLM supported services. Thus, upgrading NTLM hash to TGT may be quite helpful.
+
+Utilize Pth technique to get shell as different user. Once shell is obtained, perform any action which requires domain permissions. Doing this would subsequently create a TGT.

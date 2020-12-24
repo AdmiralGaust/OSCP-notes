@@ -8,35 +8,18 @@ __NetBIOS__ is an acronym for Network Basic Input/Output System. It provides ser
  
 ## How SMB Authentication works
  
-SMB uses NTLM protocol for authentication.
-NTLM is a challenge-response authentication protocol.
+SMB uses NTLM protocol for authentication. NTLM is a challenge-response authentication protocol. It uses an encrypted challenge/response protocol to authenticate a user without sending the user's password over the wire. More theory available in AD page.
 
-The Microsoft Kerberos security package adds greater security than NTLM to systems on a network. Although Microsoft Kerberos is the protocol of choice, NTLM is still supported.
 
-__NTLM uses an encrypted challenge/response protocol to authenticate a user without sending the user's password over the wire.__
-
-### NT Lan Manager(NTLM) Working
- 
-1. Client initiates authentication request
-2. Server responds with a challenge/nonce. The challenge is a 8-byte number which must be unpredictable.
-3. Client and server both have a shared secret.
-4. Client computes the response which is a function of secret and challenge. Mathematically, Response R=f(secret, challenge)
-5. client sends the response to server.
-6. server also calculates the response and matches it with the recieved response.
-7. In this way, the client can be authenticated without actually transmitting the secret over unsecured channels.
-
-## Problems with NTLM (SMB v1 and SMB v2 vulnerabilities)
+## Problems with SMB and NTLM implementation
  
 It was found that the challenges generated are not unique and are repeating in a very short period (2 seconds while doing attack) of time. Thus, an attacker can predict the challenges or built a dictionary of challenge-response.
 
-NOTE - In all these attacks, we are not letting any connection open. We are just connecting and then disconnecting over and again.
-In SmbRelay attacks, the sessions are kept open unlike this situation.
+__NOTE__ - In all these attacks, we are not letting any connection open. We are just connecting and then disconnecting over and again. However, In SmbRelay attacks, the sessions are kept open unlike this situation.
 
 1. __Passive replay attack__
 
-If challenges are repeated one can eavesdrop on the traffic and built a dictionary of challenge-response to get unauthorized access to server.
-An attacker can repeatedly make authentication requests to server until it gets the challenge which is there in the attacker's dictionary.
-This attack is called passive replay attack.
+If challenges are repeated one can eavesdrop on the traffic and built a dictionary of challenge-response to get unauthorized access to server. An attacker can repeatedly make authentication requests to server until it gets the challenge which is there in the attacker's dictionary. This attack is called passive replay attack.
 
 To mitigate this vulnerability a new timestamp field was introduced in client responses. It makes old generated responses invalidated as their timestamp becomes older and the server can differnetiate between the recently generated and a month older responses. Thus, an attacker cannot use a month older responses.
         
