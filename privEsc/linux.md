@@ -26,6 +26,12 @@ cat /etc/*-release
 uname -a
 ```
 
+* Check bash History
+
+```
+cat ~/.bash_history
+```
+
 * Enumerating Running Processes and Services
 
 ```
