@@ -1,3 +1,5 @@
+## Usually Encountered Ports
+
 3690 - SVN (Check anonymous svn repo access)
 1524 - ingreslock backdoor (connect with netcat)
 3632 - distccd (Distributed code compilation)
