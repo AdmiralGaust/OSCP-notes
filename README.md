@@ -2,7 +2,7 @@
 
 1. [Useful-Commands](./useful-commands.md)
 2. [Things to remember](./things-to-remember.md)
-3. [Informational](./#)
+3. [Informational](#)
 	* [Active Directory Theory](./info/active-directory-theory.md)
 	* [Antivirus Evasion](./info/antivirus-evasion.md)
 	* [Port Forwarding and Tunneling](./info/port-forwarding-and-tunneling.md)
