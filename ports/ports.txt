@@ -21,4 +21,6 @@
 5900 - VNC (vncviewer 192.168.14.129:5900)
 111 - RPCbind (maps rpc services to listening ports)
 2049 - NFS (try to mount the remote file system)
-161 - SNMP ()
+161 - SNMP (check if default community string in use)
+8080 - UPnP (windows IoT webserver "Device Portal")
+37215 - UpnP (check for CVE-2020-12695)
