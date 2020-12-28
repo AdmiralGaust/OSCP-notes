@@ -3,8 +3,17 @@
 * Automated enumeration scripts
 
 ```
+https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/winPEAS/winPEASexe
+
 // https://github.com/pentestmonkey/windows-privesc-check
 windows-privesc-check2.exe --dump -a -o report.txt
+```
+
+* Check hidden files
+
+```
+Get-ChildItem -Path . -Recurse -Force
+dir /S /a
 ```
 
 * Enumerating Users
@@ -33,7 +42,7 @@ hostname
 ```
 Get-WmiObject win32_service | Select-Object Name, State, PathName | Where-Object {$_.State -like 'Running'}
 
-tasklist / SVC
+tasklist /SVC
 ```
 
 * Enumerating Networking Information
