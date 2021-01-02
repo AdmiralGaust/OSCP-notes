@@ -177,8 +177,8 @@ dirb http://www.megacorpone.com
 ## SSH Port Forwarding
 
 ```
-ssh -N -L 8080:10.11.8.128:80 10.11.8.127
-ssh -N -R 10.11.8.128:8080:localhost:80 10.11.8.128
+ssh -N -L vps-ip:8080:10.10.10.203:80 vps_ip
+ssh -N -R vps-ip:8080:localhost:80 user@htb-ip
 ssh -N -D 127.0.0.1:8080 student@10.11.8.128
 ```
 
@@ -427,7 +427,7 @@ busybox httpd -f -p 18880
 
 ```
 python -c 'import pty; pty.spawn("/bin/bash") '
-ash -i 2>&1
+bash -i 2>&1
 ```
 
 ## Powershell to cmd
