@@ -431,7 +431,16 @@ busybox httpd -f -p 18880
 
 ```
 python -c 'import pty; pty.spawn("/bin/bash") '
+
 bash -i 2>&1
+
+#tab autocomplete
+Ctrl+z  			#background your session
+stty raw -echo; fg
+#Clear screen
+export TERM=xterm-256color
+#History enabling
+export SHELL=bash
 ```
 
 ## Powershell to cmd
