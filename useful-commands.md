@@ -491,3 +491,9 @@ hashcat -r rule --stdout file.txt
 Compress-Archive -LiteralPath C:\users\lars\Documents\wcf -DestinationPath c:
 users\lars\wcf.zip
 ```
+
+## De-obfuscate javascript
+
+```
+https://lelinhtinh.github.io/de4js/
+```
